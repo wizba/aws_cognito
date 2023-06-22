@@ -21,12 +21,13 @@ const SignInWithOTP = () => {
         password: password,
         validationData: {
           authType: 'email',
-          sendTo:"johann@wamly.io",
-          skipMultiFactorAuthentication:"false"
+          sendTo:"johanesradjad879@gmail.com",
+          skipMultiFactorAuthentication:"true"
         },
       };
 
       const signedInUser = await Auth.signIn(signInOpts);
+      console.log(signedInUser)
       setUser(signedInUser);
      
     } catch (error) {
