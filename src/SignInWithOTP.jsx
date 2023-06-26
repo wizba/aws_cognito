@@ -9,7 +9,7 @@ const SignInWithOTP = () => {
   const [email, setEmail] = useState('');
 
   /**
-   * initiate the signin process
+   * initiate the signin process by calling initiateAuth
    * allows you to skip 2MF if not congured or login 
    * 
    */
@@ -22,7 +22,7 @@ const SignInWithOTP = () => {
         validationData: {
           authType: 'email',
           sendTo:"johanesradjad879@gmail.com",
-          skipMultiFactorAuthentication:"true"
+          skipMultiFactorAuthentication:"false"
         },
       };
 
@@ -36,7 +36,7 @@ const SignInWithOTP = () => {
   };
 
   /**
-   * used to verify OTP with aws
+   * used to verify OTP with aws by calling respondToAuthChallenge
    * returns the user session
    */
   const handleSignInCode = async (e) => {
