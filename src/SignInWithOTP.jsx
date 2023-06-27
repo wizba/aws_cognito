@@ -3,10 +3,19 @@ import { Auth } from 'aws-amplify';
 const SignInWithOTP = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  const [mfaType, setMfaType] = useState('');
+  const [mfaDestination, setMfaDestination] = useState('');
+
   const [otp, setOTP] = useState('');
   const [user, setUser] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [email, setEmail] = useState('');
+
+  const mfaMetadata = {
+    skipMultiFactorAuthentication: "false",
+    skipEmail: "true"
+  };
 
   /**
    * initiate the signin process by calling initiateAuth
@@ -19,17 +28,31 @@ const SignInWithOTP = () => {
       const signInOpts = {
         username: username,
         password: password,
-        validationData: {
-          authType: 'email',
-          sendTo:"johanesradjad879@gmail.com",
-          skipMultiFactorAuthentication:"false"
-        },
+        validationData: mfaMetadata,
       };
 
       const signedInUser = await Auth.signIn(signInOpts);
       console.log(signedInUser)
       setUser(signedInUser);
      
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
+  };
+
+  const handleInitiateMfa = async (e) => {
+    e.preventDefault();
+    try {
+      const mfaMetadata = {
+        authType: mfaType,
+        sendTo: mfaDestination,
+        skipMultiFactorAuthentication: "false",
+        skipEmail: "true"
+      };
+
+      const newUser = await Auth.sendCustomChallengeAnswer(user, " ", mfaMetadata);
+      console.log(newUser); // Do something with the response
+      setUser(newUser);
     } catch (error) {
       setErrorMessage(error.message);
     }
@@ -42,8 +65,9 @@ const SignInWithOTP = () => {
   const handleSignInCode = async (e) => {
     e.preventDefault();
     try {
-      const response = await Auth.sendCustomChallengeAnswer(user, otp);
-      console.log(response); // Do something with the response
+      const signedInUser = await Auth.sendCustomChallengeAnswer(user, otp);
+      console.log(signedInUser)
+      setUser(signedInUser);
     } catch (error) {
       setErrorMessage(error.message);
     }
@@ -72,7 +96,7 @@ const SignInWithOTP = () => {
 
   return (
     <div>
-      <h1>Sign In / Sign Up</h1>
+      <h1>Sign In</h1>
       <form onSubmit={handleSignIn}>
         <label>
           Username:
@@ -87,6 +111,15 @@ const SignInWithOTP = () => {
           />
         </label>
         <button type="submit">Sign In</button>
+      </form>
+      <form onSubmit={handleInitiateMfa}>
+        <label>
+          MFA:
+          <input type="radio" value="email" name="type" defaultChecked onChange={(e) => {setMfaType(e.target.value)}}/> Email
+          <input type="radio" value="sms" name="type" onChange={(e) => {setMfaType(e.target.value)}}/> SMS
+          <input type="text" value={mfaDestination} onChange={(e) => { setMfaDestination(e.target.value);}} />
+        </label>
+        <button type="submit">Initiate MFA</button>
       </form>
       <form onSubmit={handleSignInCode}>
         <label>

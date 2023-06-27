@@ -1,6 +1,8 @@
 const awsSetup = {
-    userPoolId:"us-east-1_MZck5rLSv",
-    userPoolWebClientId: "53r5t4ev3d19adlf1jf2gpr7nq",
+    mandatorySignId: true,
+    region:'eu-west-1',
+    userPoolId:"eu-west-1_j0AIgPw0L",
+    userPoolWebClientId: "75ledea1bfgs1tsqlo1p7t271d",
     authenticationFlowType: "CUSTOM_AUTH",
   };
   
