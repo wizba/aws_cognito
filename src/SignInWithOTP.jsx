@@ -12,10 +12,6 @@ const SignInWithOTP = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [email, setEmail] = useState('');
 
-  const mfaMetadata = {
-    skipMultiFactorAuthentication: "false",
-    skipEmail: "false"
-  };
 
   /**
    * initiate the signin process by calling initiateAuth
@@ -27,8 +23,7 @@ const SignInWithOTP = () => {
     try {
       const signInOpts = {
         username: username,
-        password: password,
-        validationData: mfaMetadata,
+        password: password
       };
 
       const signedInUser = await Auth.signIn(signInOpts);
@@ -44,10 +39,9 @@ const SignInWithOTP = () => {
     e.preventDefault();
     try {
       const mfaMetadata = {
-        authType: mfaType,
-        sendTo: mfaDestination,
-        skipMultiFactorAuthentication: "false",
-        skipEmail: "false"
+        mfaId: "934723-328423-347",
+        mfaType: mfaType,
+        destination: mfaDestination
       };
 
       const newUser = await Auth.sendCustomChallengeAnswer(user, " ", mfaMetadata);
@@ -83,7 +77,7 @@ const SignInWithOTP = () => {
           email: email // Include the email attribute
         },
         validationData: {
-          authType: 'sms'
+          mfaType: 'sms'
         },
       };
 
