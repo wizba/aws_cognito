@@ -4,7 +4,7 @@ const SignInWithOTP = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const [mfaType, setMfaType] = useState('');
+  const [mfaType, setMfaType] = useState('email');
   const [mfaDestination, setMfaDestination] = useState('');
 
   const [otp, setOTP] = useState('');
@@ -14,7 +14,7 @@ const SignInWithOTP = () => {
 
   const mfaMetadata = {
     skipMultiFactorAuthentication: "false",
-    skipEmail: "true"
+    skipEmail: "false"
   };
 
   /**
@@ -47,7 +47,7 @@ const SignInWithOTP = () => {
         authType: mfaType,
         sendTo: mfaDestination,
         skipMultiFactorAuthentication: "false",
-        skipEmail: "true"
+        skipEmail: "false"
       };
 
       const newUser = await Auth.sendCustomChallengeAnswer(user, " ", mfaMetadata);
