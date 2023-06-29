@@ -5,7 +5,7 @@ const SignInWithOTP = () => {
   const [password, setPassword] = useState('');
 
   const [mfaType, setMfaType] = useState('email');
-  const [mfaDestination, setMfaDestination] = useState('');
+  const [mfaId, setMfaId] = useState('');
 
   const [otp, setOTP] = useState('');
   const [user, setUser] = useState(null);
@@ -39,9 +39,8 @@ const SignInWithOTP = () => {
     e.preventDefault();
     try {
       const mfaMetadata = {
-        mfaId: "934723-328423-347",
         mfaType: mfaType,
-        destination: mfaDestination
+        mfaId: mfaId
       };
 
       const newUser = await Auth.sendCustomChallengeAnswer(user, " ", mfaMetadata);
@@ -77,7 +76,8 @@ const SignInWithOTP = () => {
           email: email // Include the email attribute
         },
         validationData: {
-          mfaType: 'sms'
+          mfaType: mfaType,
+          mfaId: mfaId
         },
       };
 
@@ -108,10 +108,14 @@ const SignInWithOTP = () => {
       </form>
       <form onSubmit={handleInitiateMfa}>
         <label>
-          MFA:
+          MFA Type: 
           <input type="radio" value="email" name="type" defaultChecked onChange={(e) => {setMfaType(e.target.value)}}/> Email
           <input type="radio" value="sms" name="type" onChange={(e) => {setMfaType(e.target.value)}}/> SMS
-          <input type="text" value={mfaDestination} onChange={(e) => { setMfaDestination(e.target.value);}} />
+        </label>
+        <br/>
+        <label>
+          MFA ID:
+          <input type="text" value={mfaId} onChange={(e) => { setMfaId(e.target.value);}} />
         </label>
         <button type="submit">Initiate MFA</button>
       </form>
